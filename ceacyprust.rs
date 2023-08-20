@@ -36,7 +36,22 @@ fn encrypt_message() {
     io::stdin().read_line(&mut shift).expect("Failed to read input");
     let shift: u8 = shift.trim().parse().expect("Invalid shift value");
 
-    let encrypted_message = encrypt(&message, shift);
+    println!("Encrypting...");
+
+    let mut encrypted_message = String::new();
+    for c in message.chars() {
+        if c.is_alphabetic() {
+            let base = if c.is_ascii_lowercase() { b'a' } else { b'A' };
+            let offset = (c as u8) - base;
+            let encrypted_offset = (offset + shift) % 26;
+            let encrypted_char = (base + encrypted_offset) as char;
+            println!("Input: {} -> Encrypted: {}", c, encrypted_char);
+            encrypted_message.push(encrypted_char);
+        } else {
+            encrypted_message.push(c);
+        }
+    }
+
     println!("Encrypted message: {}", encrypted_message);
 }
 
@@ -50,7 +65,22 @@ fn decrypt_message() {
     io::stdin().read_line(&mut shift).expect("Failed to read input");
     let shift: u8 = shift.trim().parse().expect("Invalid shift value");
 
-    let decrypted_message = decrypt(&message, shift);
+    println!("Decrypting...");
+
+    let mut decrypted_message = String::new();
+    for c in message.chars() {
+        if c.is_alphabetic() {
+            let base = if c.is_ascii_lowercase() { b'a' } else { b'A' };
+            let offset = (c as u8) - base;
+            let decrypted_offset = (offset + 26 - shift) % 26;
+            let decrypted_char = (base + decrypted_offset) as char;
+            println!("Input: {} -> Decrypted: {}", c, decrypted_char);
+            decrypted_message.push(decrypted_char);
+        } else {
+            decrypted_message.push(c);
+        }
+    }
+
     println!("Decrypted message: {}", decrypted_message);
 }
 
